@@ -1,3 +1,21 @@
+'''Clases:
+
+- Vehiculo
+    - Coche
+    - Moto
+    - Furgoneta
+
+- Cliente
+    - Premium
+    - Casual
+
+- Reserva
+- Factura
+
+- Empresa
+'''
+
+
 class Vehiculo:
     def __init__(self, matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras):
         self.matricula = matricula
@@ -64,3 +82,34 @@ class Furgoneta(Vehiculo):
         return cls(dicc['matricula'], dicc['marca'], dicc['modelo'], dicc['anyo'], dicc['color'], dicc['kilometros'], dicc['tipo_combustible'],
                    dicc['consumo'], dicc['caballos'], dicc['autonomia'], dicc['precio_dia'], dicc['estado'], dicc['extras'], dicc['tipo_furgoneta'],
                    dicc['cilindrada'], dicc['carnet_requerido'])
+
+
+class Cliente:
+    def __init__(self, dni, nombre_completo, edad, carnets):
+        self.dni = dni
+        self.nombre_completo = nombre_completo
+        self.edad = edad
+        self.carnets = carnets
+
+
+class Casual(Cliente):
+    def __init__(self, dni, nombre_completo, edad, carnets):
+
+        super().__init__(dni, nombre_completo, edad, carnets)
+
+    @classmethod
+    def Alta_Casual(cls, dicc):
+        return cls(dicc['dni'], dicc['nombre_completo'], dicc['edad'], dicc['carnets'])
+
+#Apartir de 500€ gastados.
+class Premium(Cliente):
+    def __init__(self, dni, nombre_completo, edad, carnets):
+
+        super().__init__(dni, nombre_completo, edad, carnets)
+
+        #Cada 100€ gastados son 15€ de descuento
+        self.descueto_acumulado = 0
+
+    @classmethod
+    def Alta_Premium(cls, dicc):
+        return cls(dicc['dni'], dicc['nombre_completo'], dicc['edad'], dicc['carnets'],)

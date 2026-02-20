@@ -6,7 +6,7 @@ class Empresa:
 
     @classmethod
     def crear_empresa(cls, diccionario):
-        return cls({diccionario['nombre'], diccionario['lista_vehiculos'], diccionario['sucursales']})
+        return cls(diccionario['nombre'], diccionario['lista_vehiculos'], diccionario['sucursales'])
 
     def __str__(self):
         return f'{self.nombre} {self.lista_vehiculos} {self.lista_sucursales}'
