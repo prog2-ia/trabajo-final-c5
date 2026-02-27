@@ -4,8 +4,7 @@ class Alquiler:
         self.vehiculo = vehiculo
         self.precio = precio
 
-        if vehiculo.estado != 'Disponible':
-            raise Exception('Vehículo no disponible')
+        if vehiculo.estado != 'disponible':
+            raise Exception('Vehiculo no disponible')
 
         vehiculo.estado = 'alquilado'
-

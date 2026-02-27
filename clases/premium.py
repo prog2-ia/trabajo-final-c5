@@ -1,8 +1,9 @@
 from cliente import Cliente
 
-#A partir de 500€ gastados.
+#Apartir de 500€ gastados.
 class Premium(Cliente):
     def __init__(self, dni, nombre_completo, edad, carnets):
+
         super().__init__(dni, nombre_completo, edad, carnets)
 
         #Cada 100€ gastados son 15€ de descuento
