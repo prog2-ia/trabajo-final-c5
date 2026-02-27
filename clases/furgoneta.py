@@ -1,0 +1,16 @@
+from vehiculo import Vehiculo
+
+class Furgoneta(Vehiculo):
+    def __init__(self, matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
+                 tipo_furgoneta, capacidad_carga, carnet_requerido):
+
+        super().__init__(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras)
+        self.tipo_furgoneta = tipo_furgoneta
+        self.capacidad_carga = capacidad_carga
+        self.carnet_requerido = carnet_requerido
+
+    @classmethod
+    def Alta_Furgoneta(cls, dicc):
+        return cls(dicc['matricula'], dicc['marca'], dicc['modelo'], dicc['anyo'], dicc['color'], dicc['kilometros'], dicc['tipo_combustible'],
+                   dicc['consumo'], dicc['caballos'], dicc['autonomia'], dicc['precio_dia'], dicc['estado'], dicc['extras'], dicc['tipo_furgoneta'],
+                   dicc['capacidad_carga'], dicc['carnet_requerido'])
