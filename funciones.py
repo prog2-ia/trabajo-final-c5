@@ -1,6 +1,8 @@
 from clases.furgoneta import Furgoneta
 from clases.coche import Coche
 from clases.moto import Moto
+from clases.vehiculo import Vehiculo
+
 
 def alta_vehiculo():
     tip_veh = input('Ingrese el tipo de vehiculo (coche/moto/furgoneta): ')
@@ -45,7 +47,3 @@ def alta_vehiculo():
 
     else:
         print('ERROR: El tipo de vehiculo no es valido')
-
-
-v1 = alta_vehiculo()
-print(v1.kilometros)
