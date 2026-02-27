@@ -1,4 +1,6 @@
-import clases
+from clases.furgoneta import Furgoneta
+from clases.coche import Coche
+from clases.moto import Moto
 
 def alta_vehiculo():
     tip_veh = input('Ingrese el tipo de vehiculo (coche/moto/furgoneta): ')
@@ -22,7 +24,7 @@ def alta_vehiculo():
         puertas = input('Introduce el número de puestas del coche: ')
         capacidad_maletero = input('Introduce la capacidad del maletero del coche (litros): ')
 
-        return clases.Coche(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
+        return Coche(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
                      tipo_coche, plazas, puertas, capacidad_maletero)
 
     elif tip_veh == 'moto':
@@ -30,7 +32,7 @@ def alta_vehiculo():
         cilindrada = input('Introduce la cilindrada de la moto: ')
         carnet_requerido = input('Introduce el carnet requerido para conducir la moto: ')
 
-        return clases.Moto(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
+        return Moto(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
                     tipo_moto, cilindrada, carnet_requerido)
 
     elif tip_veh == 'furgoneta':
@@ -38,7 +40,7 @@ def alta_vehiculo():
         capacidad_carga = input('Introduce la capacidad del carga de la furgoneta: ')
         carnet_requerido = input('Introduce el carnet requerido para conducir la furgoneta: ')
 
-        return clases.Furgoneta(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
+        return Furgoneta(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
                          tipo_furgoneta, capacidad_carga, carnet_requerido)
 
     else:

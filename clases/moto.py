@@ -1,4 +1,4 @@
-from vehiculo import Vehiculo
+from clases.vehiculo import Vehiculo
 
 class Moto(Vehiculo):
     def __init__(self, matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
