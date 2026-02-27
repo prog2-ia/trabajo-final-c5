@@ -1,6 +1,6 @@
 from cliente import Cliente
 
-#Apartir de 500€ gastados.
+#A partir de 500€ gastados.
 class Premium(Cliente):
     def __init__(self, dni, nombre_completo, edad, carnets):
 
