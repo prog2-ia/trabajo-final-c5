@@ -81,7 +81,7 @@ class Furgoneta(Vehiculo):
     def Alta_Furgoneta(cls, dicc):
         return cls(dicc['matricula'], dicc['marca'], dicc['modelo'], dicc['anyo'], dicc['color'], dicc['kilometros'], dicc['tipo_combustible'],
                    dicc['consumo'], dicc['caballos'], dicc['autonomia'], dicc['precio_dia'], dicc['estado'], dicc['extras'], dicc['tipo_furgoneta'],
-                   dicc['cilindrada'], dicc['carnet_requerido'])
+                   dicc['capacidad_carga'], dicc['carnet_requerido'])
 
 
 class Cliente:
@@ -112,4 +112,17 @@ class Premium(Cliente):
 
     @classmethod
     def Alta_Premium(cls, dicc):
-        return cls(dicc['dni'], dicc['nombre_completo'], dicc['edad'], dicc['carnets'],)
+        return cls(dicc['dni'], dicc['nombre_completo'], dicc['edad'], dicc['carnets']
+
+class Alquiler:
+    def __init__(self, cliente, vehiculo, precio):
+        self.cliente = cliente
+        self.vehiculo = vehiculo
+        self.precio = precio
+
+        if vehiculo.estado != 'disponible':
+            raise Exception('Vehiculo no disponible')
+
+        vehiculo.estado = 'alquilado'
+
+    
