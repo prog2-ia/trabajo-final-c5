@@ -11,4 +11,4 @@ class Premium(Cliente):
 
     @classmethod
     def Alta_Premium(cls, dicc):
-        return cls(dicc['dni'], dicc['nombre_completo'], dicc['edad'], dicc['carnets']
+        return cls(dicc['dni'], dicc['nombre_completo'], dicc['edad'], dicc['carnets'])
