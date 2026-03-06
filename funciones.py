@@ -1,7 +1,9 @@
 from clases.furgoneta import Furgoneta
 from clases.coche import Coche
 from clases.moto import Moto
-from clases.vehiculo import Vehiculo
+
+from clases.casual import Casual
+from clases.premium import Premium
 
 
 def alta_vehiculo():
