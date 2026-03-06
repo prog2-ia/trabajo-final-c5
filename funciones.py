@@ -49,3 +49,70 @@ def alta_vehiculo():
 
     else:
         print('ERROR: El tipo de vehiculo no es valido')
+
+
+def verificar_id(id_cliente):
+    id_cliente = id_cliente.strip()
+    id_cliente = id_cliente.upper()
+    id_cliente = id_cliente.replace("-", "")
+
+    if len(id_cliente) != 9:
+        return False
+
+    letras = "TRWAGMYFPDXBNJZSQVHLCKE"
+    mapeo_nie = {'X': '0', 'Y': '1', 'Z': '2'}
+
+    cuerpo_num = id_cliente[:-1]
+    letra_final = id_cliente[-1]
+
+    if cuerpo_num[0] in mapeo_nie:
+        cuerpo_num = mapeo_nie[cuerpo_num[0]] + cuerpo_num[1:]
+
+    if not cuerpo_num.isdigit():
+        return False
+
+    return letras[int(cuerpo_num) % 23] == letra_final
+
+
+
+def validar_cif(cif):
+    cif.upper().strip()
+
+    if len(cif) != 9:
+        return False
+
+    tipo = cif[0]
+    numeros = cif[1:8]
+    control = cif[8]
+
+    if not tipo.isalpha() or not numeros.isdigit():
+        return False
+
+    letras_validas = "ABCDEFGHJKLMNPQRSUVW"
+    if tipo not in letras_validas:
+        return False
+
+    pares = 0
+    impares = 0
+
+    for i in range(len(numeros)):
+        num = int(numeros[i])
+        if (i + 1) % 2 == 0:
+            pares += num
+        else:
+            temp = num * 2
+            impares += (temp // 10) + (temp % 10)
+
+    suma = pares + impares
+    digito_final = 10 - (suma % 10)
+    if digito_final == 10:
+        digito_final = 0
+
+    letras_control = "JABCDEFGHI"
+
+    if tipo in "ABEH":
+        return str(digito_final) == control
+    elif tipo in "KPQS":
+        return letras_control[digito_final] == control
+    else:
+        return (str(digito_final) == control) or (letras_control[digito_final] == control)
