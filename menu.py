@@ -1,26 +1,5 @@
 from funciones import alta_vehiculo
 
-def inicio():
-    respuesta = ''
-
-    print()
-    print('Bienvenido al sistema'.center(25))
-    print(('-'*25))
-
-    while respuesta != 'cliente' and respuesta != 'empresa':
-
-        print('¿Como quiere acceder?'.center(25))
-        respuesta = input('cliente/empresa: ')
-
-        if respuesta == 'cliente':
-            manu_cliente()
-
-        elif respuesta == 'empresa':
-            menu_empresa()
-
-        else:
-            print()
-            print('ERROR: Acceso Invalido')
 
 def manu_cliente():
     respuesta = ''
@@ -84,6 +63,3 @@ def menu_empresa():
 
         else:
             print('ERROR: Acción Invalida')
-
-if __name__ == '__main__':
-    inicio()
