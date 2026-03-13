@@ -9,7 +9,7 @@ import json
 def inicio():
     respuesta = ''
 
-    with open('datos.json', 'r', encoding='utf-8') as datos:
+    with open('clientes.json', 'r', encoding='utf-8') as datos:
         lista_usuarios = json.load(datos)
 
     print()
@@ -27,7 +27,7 @@ def inicio():
                 alta_usuario(usuario)
                 lista_usuarios.append(usuario)
 
-                with open('datos.json', 'w', encoding='utf-8') as datos:
+                with open('clientes.json', 'w', encoding='utf-8') as datos:
                     json.dump(lista_usuarios, datos, indent=4, ensure_ascii=False)
 
             menu_cliente()

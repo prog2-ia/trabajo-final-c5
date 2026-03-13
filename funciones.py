@@ -1,3 +1,5 @@
+import json
+
 from clases.furgoneta import Furgoneta
 from clases.coche import Coche
 from clases.moto import Moto
@@ -26,9 +28,18 @@ def alta_vehiculo():
         plazas = input('Introduce el número de plazas del coche: ')
         puertas = input('Introduce el número de puestas del coche: ')
         capacidad_maletero = input('Introduce la capacidad del maletero del coche (litros): ')
+        carnet_requerido = input('Introduce el carnet requerido para conducir el coche: ')
+
+        with open('vehiculos.json', 'r', encoding='utf-8') as vehiculos:
+            lista_vehiculos = json.load(vehiculos)
+
+        lista_vehiculos.append(matricula)
+
+        with open('vehiculos.json', 'w', encoding='utf-8') as vehiculos:
+            json.dump(lista_vehiculos, vehiculos, indent=4, ensure_ascii=False)
 
         return Coche(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
-                     tipo_coche, plazas, puertas, capacidad_maletero)
+                     tipo_coche, plazas, puertas, capacidad_maletero, carnet_requerido)
 
     elif tip_veh == 'moto':
         tipo_moto = input('Introduce el tipo de moto: ')
@@ -48,6 +59,9 @@ def alta_vehiculo():
 
     else:
         print('ERROR: El tipo de vehiculo no es valido')
+        return None
+
+
 
 def alta_usuario(dni):
     nombre_completo = input('Introduce tu nombre completo: ')
