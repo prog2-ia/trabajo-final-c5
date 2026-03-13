@@ -1,13 +1,16 @@
-import funciones as fn
 import menu
+from funciones import *
+from menu import *
 
 import json
 
-from clases.casual import Casual
+
 
 def inicio():
     respuesta = ''
-    lista_usuarios = []
+
+    with open('datos.json', 'r', encoding='utf-8') as datos:
+        lista_usuarios = json.load(datos)
 
     print()
     print('Bienvenido al sistema'.center(25))
@@ -20,12 +23,17 @@ def inicio():
 
         if respuesta == 'cliente':
             usuario = input('Introduce tu DNI/NIE: ')
-            if usuario in lista_usuarios:
-                menu.manu_cliente()
-            else funciones.alta_usuario()
+            if usuario not in lista_usuarios:
+                alta_usuario(usuario)
+                lista_usuarios.append(usuario)
+
+                with open('datos.json', 'w', encoding='utf-8') as datos:
+                    json.dump(lista_usuarios, datos, indent=4, ensure_ascii=False)
+
+            menu_cliente()
 
         elif respuesta == 'empresa':
-            menu.menu_empresa()
+            menu_empresa()
 
         else:
             print()

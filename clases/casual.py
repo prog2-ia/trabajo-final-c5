@@ -1,4 +1,4 @@
-from cliente import Cliente
+from clases.cliente import Cliente
 
 class Casual(Cliente):
     def __init__(self, dni, nombre_completo, edad, carnets):

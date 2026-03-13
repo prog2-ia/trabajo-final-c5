@@ -1,4 +1,4 @@
-from cliente import Cliente
+from clases.cliente import Cliente
 
 #A partir de 500€ gastados.
 class Premium(Cliente):

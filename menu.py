@@ -1,7 +1,7 @@
 from funciones import alta_vehiculo
+import json
 
-
-def manu_cliente():
+def menu_cliente():
     respuesta = ''
 
     print(('-'*25))

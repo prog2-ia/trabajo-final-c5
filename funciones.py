@@ -3,7 +3,6 @@ from clases.coche import Coche
 from clases.moto import Moto
 
 from clases.casual import Casual
-from clases.premium import Premium
 
 
 def alta_vehiculo():
@@ -49,6 +48,15 @@ def alta_vehiculo():
 
     else:
         print('ERROR: El tipo de vehiculo no es valido')
+
+def alta_usuario(dni):
+    nombre_completo = input('Introduce tu nombre completo: ')
+    edad = input('Introduce tu edad: ')
+    carnets = input('Introduce los carnets que tienes separados por comas: ')
+    lista_carnets = carnets.split(', ')
+
+    return Casual(dni, nombre_completo, edad, lista_carnets)
+
 
 
 def verificar_id(id_cliente):
