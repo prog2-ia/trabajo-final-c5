@@ -1,4 +1,4 @@
-from funciones import alta_vehiculo
+from funciones import alta_vehiculo, mostrar_vehiculos
 import json
 
 def menu_cliente():
@@ -17,10 +17,10 @@ def menu_cliente():
         print()
 
         if respuesta == '1':
-            pass
+            mostrar_vehiculos()
 
         elif respuesta == '2':
-            pass
+            mostrar_vehiculos()
 
         elif respuesta == '3':
             print('Saliendo...')

@@ -38,10 +38,3 @@ class Presupuesto:
         print(f'DNI/NIE: {self.cliente.dni}')
         print(f'Datos del vehículo: {self.vehiculo.marca} {self.vehiculo.modelo} / {self.vehiculo.matricula}')
         print(f'--------------------------------\nEl precio total es de: {self.precio_total}')
-
-#prueba
-cliente1 = Cliente('Y12345678Z', 'Carlos O', 18, ['AM','A1','A2', 'B'])
-coche1 = Coche('2623CDJ', 'Ford', 'Focus', 2002, 'gris', 360000, \
-               'diesel', 6, 100, 800, 25, 'Disponible', \
-               False,'hatchback', 5, 4, 350, 'B')
-presupuesto1 = Presupuesto(cliente1, coche1, 3)

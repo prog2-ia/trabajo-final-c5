@@ -11,6 +11,4 @@ class Furgoneta(Vehiculo):
 
     @classmethod
     def Alta_Furgoneta(cls, dicc):
-        return cls(dicc['matricula'], dicc['marca'], dicc['modelo'], dicc['anyo'], dicc['color'], dicc['kilometros'], dicc['tipo_combustible'],
-                   dicc['consumo'], dicc['caballos'], dicc['autonomia'], dicc['precio_dia'], dicc['estado'], dicc['extras'], dicc['tipo_furgoneta'],
-                   dicc['capacidad_carga'], dicc['carnet_requerido'])
+        return cls(**dicc)

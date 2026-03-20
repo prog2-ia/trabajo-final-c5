@@ -14,6 +14,4 @@ class Coche(Vehiculo):
 
     @classmethod
     def Alta_Coche(cls, dicc):
-        return cls(dicc['matricula'], dicc['marca'], dicc['modelo'], dicc['anyo'], dicc['color'], dicc['kilometros'], dicc['tipo_combustible'],
-                   dicc['consumo'], dicc['caballos'], dicc['autonomia'], dicc['precio_dia'],dicc['estado'], dicc['extras'], dicc['tipo_coche'],
-                   dicc['plazas'], dicc['puertas'], dicc['capacidad_maletero'], dicc['carnet_requerido'])
+        return cls(**dicc)
