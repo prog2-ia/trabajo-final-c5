@@ -1,38 +1,53 @@
-import menu
 from funciones import *
 from menu import *
-
 import json
-
 
 
 def inicio():
     respuesta = ''
-
-    with open('clientes.json', 'r', encoding='utf-8') as datos:
-        lista_usuarios = json.load(datos)
-
+    datos = open('clientes.json', 'r', encoding='utf-8')
+    lista_usuarios = json.load(datos)
+    datos.close()
     print()
-    print('Bienvenido al sistema'.center(25))
-    print(('-'*25))
+    print('Bienvenido al sistema')
+    print(('-------------------------------------------'))
 
     while respuesta != 'cliente' and respuesta != 'empresa':
-
-        print('¿Como quiere acceder?'.center(25))
+        print('¿Como quiere acceder?')
         respuesta = input('cliente/empresa: ')
 
         if respuesta == 'cliente':
             usuario = input('Introduce tu DNI/NIE: ')
+
+            from funciones import verificar_id
+            if not verificar_id(usuario):
+                print('ERROR: DNI/NIE no válido.')
+                respuesta = ''
+                continue
+
             if usuario not in lista_usuarios:
-                alta_usuario(usuario)
+                cliente_actual = alta_usuario(usuario)
                 lista_usuarios.append(usuario)
+                datos = open('clientes.json', 'w', encoding='utf-8')
+                json.dump(lista_usuarios, datos, indent=4, ensure_ascii=False)
+                datos.close()
 
-                with open('clientes.json', 'w', encoding='utf-8') as datos:
-                    json.dump(lista_usuarios, datos, indent=4, ensure_ascii=False)
+            else:
+                from clases.cliente import Cliente
+                # Creamos un cliente temporal porque el json original solo guardaba strings
+                cliente_actual = Cliente(usuario, 'Cliente Habitual', 30, ['B'])
 
-            menu_cliente()
+            menu_cliente(cliente_actual)
 
         elif respuesta == 'empresa':
+            cif = input('Introduce el CIF de la empresa (ej: B12345674): ')
+
+            from funciones import validar_cif
+            if not validar_cif(cif):
+                print('ERROR: CIF de empresa no válido.')
+                respuesta = ''
+                continue
+
             menu_empresa()
 
         else:

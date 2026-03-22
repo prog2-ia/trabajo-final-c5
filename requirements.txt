@@ -1,0 +1,3 @@
+#Hecho y probado en la versión de Python 3.10+, aunque debería funcionar en la mayoría de versiones de Python
+#No hace falta usar ninguna librería externa que haya que instalar con pip.
+#el código funciona con lo que viene de base en Python (json, random, abc para las clases abstractas...)

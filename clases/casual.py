@@ -1,5 +1,7 @@
 from clases.cliente import Cliente
 
+#esta clase no se usa
+
 class Casual(Cliente):
     def __init__(self, dni, nombre_completo, edad, carnets):
 

@@ -3,7 +3,7 @@ class Cliente:
     def __init__(self, dni, nombre_completo, edad, carnets, descuento = 0, premium = False, gastado_premium = 0, total_gastado = 0, total_ahorrado = 0):
         self.dni = dni
         self.nombre_completo = nombre_completo
-        self.edad = edad
+        self.edad = int(edad)
         self.carnets = carnets
         self._descuento = 0
         self._premium = False

@@ -1,10 +1,11 @@
 from funciones import alta_vehiculo, mostrar_vehiculos
 import json
 
-def menu_cliente():
+
+def menu_cliente(cliente_actual):
     respuesta = ''
 
-    print(('-'*25))
+    print(('-' * 25))
 
     while respuesta != '1' and respuesta != '2' and respuesta != '3':
 
@@ -16,11 +17,27 @@ def menu_cliente():
         respuesta = input('Acción: ')
         print()
 
-        if respuesta == '1':
+        if respuesta == '1' or respuesta == '2':
             mostrar_vehiculos()
+            print()
+            matricula = input('Introduce la matrícula del vehículo a elegir: ')
+            dias = int(input('¿Cuántos días? (min 1): '))
 
-        elif respuesta == '2':
-            mostrar_vehiculos()
+            from funciones import buscar_vehiculo_por_matricula
+            vehiculo_obj = buscar_vehiculo_por_matricula(matricula)
+
+            if vehiculo_obj:
+                if respuesta == '1':
+                    from clases.presupuesto import Presupuesto
+                    Presupuesto(cliente_actual, vehiculo_obj, dias)
+                elif respuesta == '2':
+                    from clases.alquiler import Alquiler
+                    Alquiler(cliente_actual, vehiculo_obj, dias)
+            else:
+                print('Vehículo no encontrado o matrícula incorrecta.')
+
+            # Resetear respuesta para seguir en el menú
+            respuesta = ''
 
         elif respuesta == '3':
             print('Saliendo...')
@@ -50,13 +67,13 @@ def menu_empresa():
             alta_vehiculo()
 
         elif respuesta == '2':
-            pass
+            menu_empresa()
 
         elif respuesta == '3':
-            pass
+            menu_empresa()
 
         elif respuesta == '4':
-            pass
+            menu_empresa()
 
         elif respuesta == '5':
             print('Saliendo...')

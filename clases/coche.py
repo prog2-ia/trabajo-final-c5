@@ -12,6 +12,10 @@ class Coche(Vehiculo):
         self.capacidad_maletero = capacidad_maletero
         self.carnet_requerido = carnet_requerido
 
+    def calcular_tarifa(self, dias):
+        # Polimorfismo: tarifa plana para coches
+        return self.precio_dia * dias
+
     @classmethod
-    def Alta_Coche(cls, dicc):
+    def alta_coche(cls, dicc):
         return cls(**dicc)
