@@ -10,6 +10,10 @@ class Moto(Vehiculo):
         self.cilindrada = cilindrada
         self.carnet_requerido = carnet_requerido
 
+    def calcular_tarifa(self, dias):
+        #tienen un descuento del 10% sobre el precio base
+        return (self.precio_dia * dias) * 0.9
+
     @classmethod
-    def Alta_Moto(cls, dicc):
+    def alta_moto(cls, dicc):
         return cls(**dicc)

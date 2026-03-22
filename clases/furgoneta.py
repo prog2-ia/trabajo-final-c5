@@ -9,6 +9,10 @@ class Furgoneta(Vehiculo):
         self.capacidad_carga = capacidad_carga
         self.carnet_requerido = carnet_requerido
 
+    def calcular_tarifa(self, dias):
+        #tiene un cargo extra por ser furgoneta, ya que necesitan más mantenimiento...
+        return (self.precio_dia * dias) + 10
+
     @classmethod
-    def Alta_Furgoneta(cls, dicc):
+    def alta_furgoneta(cls, dicc):
         return cls(**dicc)
