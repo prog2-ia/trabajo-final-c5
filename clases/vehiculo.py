@@ -33,5 +33,11 @@ class Vehiculo(ABC):
         #esto es para que las clases hijas implementen su propio metodo de calcular tarifa
         pass
 
+    def __bool__(self):
+        if self.estado == 'Disponible':
+            return True
+        else:
+            return False
+
     def __str__(self):
         return f'{self.marca} {self.modelo} [{self.matricula}] - {self.precio_dia}€/día'
