@@ -1,3 +1,9 @@
+from clases.casual import Casual
+from clases.empresa import Empresa
+from clases.coche import Coche
+from clases.furgoneta import Furgoneta
+from clases.moto import Moto
+
 from funciones import *
 from menu import *
 import json
@@ -56,4 +62,25 @@ def inicio():
 
 
 if __name__ == '__main__':
+
+    lista_usuarios = []
+    datos_usuarios=open('clientes.json', 'r', encoding='utf-8')
+    for usuario in datos_usuarios:
+        lista_usuarios.append(Casual.alta_casual(usuario))
+
+    lista_vehiculos = []
+    datos_vehiculos = open('vehiculos.json', 'r', encoding='utf-8')
+    for vehiculo in datos_vehiculos:
+        if 'tipo_coche' in vehiculo:
+            lista_vehiculos.append(Coche.alta_coche(vehiculo))
+        elif 'tipo_furgoneta' in vehiculo:
+            lista_vehiculos.append(Furgoneta.alta_furgoneta(vehiculo))
+        elif 'tipo_moto' in vehiculo:
+            lista_vehiculos.append(Moto.alta_moto(vehiculo))
+
+    lista_empresas = []
+    datos_empresas=open('empresas.json', 'r', encoding='utf-8')
+    for empresa in lista_empresas:
+        lista_empresas.append(Empresa.crear_empresa(empresa))
+
     inicio()
