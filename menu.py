@@ -2,7 +2,7 @@ from funciones import alta_vehiculo, mostrar_vehiculos
 import json
 
 
-def menu_cliente(cliente_actual):
+def menu_cliente(cliente_actual,lista_vehiculos):
     respuesta = ''
 
     print(('-' * 25))
@@ -18,7 +18,7 @@ def menu_cliente(cliente_actual):
         print()
 
         if respuesta == '1' or respuesta == '2':
-            mostrar_vehiculos()
+            mostrar_vehiculos(lista_vehiculos)
             print()
             matricula = input('Introduce la matrícula del vehículo a elegir: ')
             dias = int(input('¿Cuántos días? (min 1): '))
