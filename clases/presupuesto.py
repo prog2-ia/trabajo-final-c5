@@ -76,15 +76,13 @@ class Presupuesto:
 #pruebas
 if __name__ == '__main__':
     cliente1 = Cliente('Y12345678Z', 'Carlos O', 18, ['AM', 'A1', 'A2', 'B'])
-    coche_prueba = Coche('2623CDJ', 'Ford', 'Focus', 2002, 'gris', 360000, 'diesel', 6, 100, 800, 25, 'Disponible', 
+    coche_prueba = Coche('2623CDJ', 'Ford', 'Focus', 2002, 'gris', 360000, 'diesel', 6, 100, 800, 25, 'Disponible',
     False, 'hatchback', 5, 4, 350, 'B')
 
-    print('PRESUPUESTO 1')
-    Presupuesto(cliente1, coche_prueba, 10)
-    print(f'Gasto real del cliente: {cliente1._total_gastado} €') #un presupuesto no suma gasto
+    print('Presupuesto 1')
+    Presupuesto(cliente1, coche_prueba, 10) #un presupuesto no suma gasto
     print()
 
-    print('PRESUPUESTO 2')
+    print('Presupuesto 2')
     Presupuesto(cliente1, coche_prueba, 20)
-    print(f'Gasto real del cliente: {cliente1._total_gastado} €')
     print()
