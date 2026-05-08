@@ -2,7 +2,7 @@ from clases.cliente import Cliente
 from clases.coche import Coche
 
 class Presupuesto:
-    def __init__(self, cliente, vehiculo, dias):
+    def __init__(self, cliente: Cliente, vehiculo: Coche, dias: int) -> None:
         self.vehiculo = vehiculo
         self.cliente = cliente
         self.dias = dias
@@ -30,14 +30,21 @@ class Presupuesto:
         else:
             return True
 
-    def calcular_presupuesto(self): #calcula el presupuesto básico del alquiler
-        _precio = self.vehiculo.precio_dia * self.dias * (1.3 if self.cliente.edad < 25 else 1)  #Un 30% más si el cliente tiene menos de 25 años
+    def calcular_presupuesto(self) -> float: #calcula el presupuesto básico del alquiler
+        tarifa_base = self.vehiculo.calcular_tarifa(self.dias)
+        _precio = tarifa_base * (1.3 if self.cliente.edad < 25 else 1)  #Un 30% más si el cliente tiene menos de 25 años
         return _precio
 
-    def calcular_descuento(self): #calcula el descuento (simulado) sin cambiar los datos del cliente porque no se ha alquilado aún
-        gastado_ahora = self.cliente._total_gastado + self._precio
-        puntos = self.cliente._gastado_premium
-        es_premium = self.cliente._premium
+    def __add__(self, other) -> float:
+        # Sobrecarga del operador + para sumar el coste de dos presupuestos
+        if isinstance(other, Presupuesto):
+            return self._precio_final + other._precio_final
+        return NotImplemented
+
+    def calcular_descuento(self) -> float: #calcula el descuento (simulado) sin cambiar los datos del cliente porque no se ha alquilado aún
+        gastado_ahora = self.cliente.total_gastado + self._precio
+        puntos = self.cliente.gastado_premium
+        es_premium = self.cliente.premium
 
         if not es_premium and gastado_ahora >= 500:
             puntos = gastado_ahora - 500
@@ -73,16 +80,3 @@ class Presupuesto:
         print('=======================================================')
         print()
 
-#pruebas
-if __name__ == '__main__':
-    cliente1 = Cliente('Y12345678Z', 'Carlos O', 18, ['AM', 'A1', 'A2', 'B'])
-    coche_prueba = Coche('2623CDJ', 'Ford', 'Focus', 2002, 'gris', 360000, 'diesel', 6, 100, 800, 25, 'Disponible',
-    False, 'hatchback', 5, 4, 350, 'B')
-
-    print('Presupuesto 1')
-    Presupuesto(cliente1, coche_prueba, 10) #un presupuesto no suma gasto
-    print()
-
-    print('Presupuesto 2')
-    Presupuesto(cliente1, coche_prueba, 20)
-    print()

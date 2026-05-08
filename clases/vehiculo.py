@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 
+
 class Vehiculo(ABC):
-    def __init__(self, matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos,
-                 autonomia, precio_dia, estado, extras):
+    def __init__(self, matricula: str, marca: str, modelo: str, anyo: int, color: str, kilometros: float,
+                 tipo_combustible: str, consumo: float, caballos: int,
+                 autonomia: float, precio_dia: float, estado: str, extras: str) -> None:
         self.matricula = matricula
         self.marca = marca
         self.modelo = modelo
@@ -13,7 +15,7 @@ class Vehiculo(ABC):
         self.consumo = consumo
         self.caballos = caballos
         self.autonomia = autonomia
-        self.__precio_dia = precio_dia #privado para no modificarlo directamente
+        self.__precio_dia = float(precio_dia)  # privado para no modificarlo directamente
         self.estado = estado
         self.extras = extras
 
@@ -29,15 +31,25 @@ class Vehiculo(ABC):
             print('El precio debe ser positivo')
 
     @abstractmethod
-    def calcular_tarifa(self, dias):
-        #esto es para que las clases hijas implementen su propio metodo de calcular tarifa
+    def calcular_tarifa(self, dias: int) -> float:
+        # esto es para que las clases hijas implementen su propio metodo de calcular tarifa
         pass
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         if self.estado == 'Disponible':
             return True
         else:
             return False
 
-    def __str__(self):
+    def __lt__(self, other) -> bool:
+        if isinstance(other, Vehiculo):
+            return self.precio_dia < other.precio_dia
+        return NotImplemented
+
+    def __gt__(self, other) -> bool:
+        if isinstance(other, Vehiculo):
+            return self.precio_dia > other.precio_dia
+        return NotImplemented
+
+    def __str__(self) -> str:
         return f'{self.marca} {self.modelo} [{self.matricula}] - {self.precio_dia}€/día'

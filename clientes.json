@@ -1,2 +1,30 @@
 [
-    
+    {
+        "dni": "y0866893z",
+        "nombre_completo": "jc",
+        "edad": 19,
+        "carnets": [
+            "b",
+            " a2"
+        ],
+        "_descuento": 0,
+        "_premium": false,
+        "_gastado_premium": 0,
+        "_total_gastado": 0,
+        "_total_ahorrado": 0
+    },
+    {
+        "dni": "y0866893Z",
+        "nombre_completo": "jc",
+        "edad": 19,
+        "carnets": [
+            "b",
+            "a2"
+        ],
+        "_descuento": 0,
+        "_premium": false,
+        "_gastado_premium": 0,
+        "_total_gastado": 0,
+        "_total_ahorrado": 0
+    }
+]
