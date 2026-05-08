@@ -27,3 +27,7 @@ class Cliente:
             self._gastado_premium %= 100 #actualiza el saldo premium (puede quedar algo para el siguiente descuento)
             self._total_ahorrado += descuento_actual
         return descuento_actual
+
+    def __iadd__(self, nuevo_carnet): #anadir carnets nuevos en caso de que haga falta
+        self.carnets.append(nuevo_carnet)
+        return self
