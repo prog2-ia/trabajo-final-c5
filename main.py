@@ -15,12 +15,19 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
     print('Bienvenido al sistema')
     print(('-------------------------------------------'))
 
-    while respuesta != 'cliente' and respuesta != 'empresa':
-        print('¿Como quiere acceder?')
-        respuesta = input('cliente/empresa: ').strip().lower()
+    while True:
+        #Preguntamos al usuario quien es
+        print('\n¿Como quiere acceder?')
+        respuesta = input('cliente/empresa/salir: ').strip().lower()
+
+        if respuesta == 'salir':
+            print('Saliendo del sistema...')
+            break
 
         if respuesta == 'cliente':
-            usuario = input('Introduce tu DNI/NIE: ').strip()
+            usuario = input('Introduce tu DNI/NIE (o "volver" para atrás): ').strip().upper()
+            if usuario == 'VOLVER':
+                continue
 
             if not verificar_id(usuario):
                 print('ERROR: DNI/NIE no válido.')
@@ -30,13 +37,24 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
             cliente_actual = next((c for c in lista_usuarios if c.dni == usuario), None)
 
             if not cliente_actual:
+                #Si no lo encuentra, creamos un usuario nuevo
                 print('Usuario no encontrado. Procediendo a dar de alta.')
                 cliente_actual = alta_usuario(usuario, lista_usuarios)
+                if not cliente_actual:
+                    respuesta = ''
+                    continue
+
+            if cliente_actual.edad < 18:
+                print('Error: Solo los mayores de edad pueden acceder a la plataforma.')
+                respuesta = ''
+                continue
 
             menu_cliente(cliente_actual, lista_vehiculos)
 
         elif respuesta == 'empresa':
-            cif = input('Introduce el CIF de la empresa (ej: B12345674): ').strip()
+            cif = input('Introduce el CIF de la empresa o "volver": ').strip().upper()
+            if cif == 'VOLVER':
+                continue
 
             if not validar_cif(cif):
                 print('ERROR: CIF de empresa no válido.')
@@ -46,16 +64,16 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
             menu_empresa(lista_vehiculos)
 
         else:
-            print()
-            print('ERROR: Acceso Invalido')
+            print('\nOpción no válida. Por favor, escriba \'cliente\', \'empresa\' o \'salir\'.')
 
 
 if __name__ == '__main__':
-    # Cargamos datos JSON y los convertimos en objetos
+    #Cargamos datos JSON y los convertimos en objetos
     lista_usuarios_dict = cargar_datos_json('clientes.json')
     lista_usuarios = []
     for u in lista_usuarios_dict:
-        # Recuperamos propiedades internas si existen
+        #Convertimos el texto del json en objeto Cliente
+        #Recuperamos propiedades internas si existen
         cliente = Casual.alta_casual(u)
         if '_premium' in u: cliente._premium = u['_premium']
         if '_total_gastado' in u: cliente._total_gastado = u['_total_gastado']

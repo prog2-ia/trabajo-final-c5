@@ -1,8 +1,9 @@
 from clases.cliente import Cliente
-from clases.coche import Coche
+from clases.vehiculo import Vehiculo
 
+#Calcula un coste estimado sin confirmar alquiler
 class Presupuesto:
-    def __init__(self, cliente: Cliente, vehiculo: Coche, dias: int) -> None:
+    def __init__(self, cliente: Cliente, vehiculo: Vehiculo, dias: int) -> None:
         self.vehiculo = vehiculo
         self.cliente = cliente
         self.dias = dias
@@ -24,10 +25,14 @@ class Presupuesto:
         elif self.vehiculo.carnet_requerido not in self.cliente.carnets:
             print(f'No se puede alquilar {tipo_vehiculo} sin el carnet {self.vehiculo.carnet_requerido}')
             return False
-        elif self.dias < 1:
-            print(f'Mínimo un día para poder alquilar')
+        elif self.dias < 1 or self.dias > 100:
+            print(f'Los días de alquiler deben ser entre 1 y 100')
             return False
         else:
+            from funciones import vehiculo_disponible
+            if not vehiculo_disponible(self.vehiculo.matricula):
+                print(f'El vehículo {self.vehiculo.matricula} se encuentra alquilado en estas fechas.')
+                return False
             return True
 
     def calcular_presupuesto(self) -> float: #calcula el presupuesto básico del alquiler
@@ -36,10 +41,16 @@ class Presupuesto:
         return _precio
 
     def __add__(self, other) -> float:
-        # Sobrecarga del operador + para sumar el coste de dos presupuestos
+        #Sobrecarga del operador + para sumar el coste de dos presupuestos
         if isinstance(other, Presupuesto):
             return self._precio_final + other._precio_final
         return NotImplemented
+
+    def __radd__(self, other) -> float:
+        #Permite la suma inversa util para sum() con presupuestos
+        if other == 0:
+            return self._precio_final
+        return self.__add__(other)
 
     def calcular_descuento(self) -> float: #calcula el descuento (simulado) sin cambiar los datos del cliente porque no se ha alquilado aún
         gastado_ahora = self.cliente.total_gastado + self._precio

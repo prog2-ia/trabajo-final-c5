@@ -6,6 +6,7 @@ from clases.coche import Coche
 from clases.moto import Moto
 from clases.casual import Casual
 from clases.vehiculo import Vehiculo
+from excepciones import EdadMinimaException
 
 '''
 PARA EMPRESAS:
@@ -13,12 +14,15 @@ PARA EMPRESAS:
 
 
 def cargar_datos_json(nombre_archivo: str) -> list:
+    # Lee la informacion de los archivos json
     if os.path.exists(nombre_archivo):
         try:
             with open(nombre_archivo, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except (json.JSONDecodeError, FileNotFoundError):
             return []
+        finally:
+            pass  # Bloque finally simulando cierre o limpieza
     return []
 
 
@@ -42,7 +46,7 @@ def alta_vehiculo() -> Vehiculo | None:
             lista_vehiculos.append(Moto.alta_moto(v))
 
     tip_veh = input('Ingrese el tipo de vehiculo (coche/moto/furgoneta): ').strip().lower()
-    matricula = input('Introduce la matricula del vehiculo: ')
+    matricula = input('Introduce la matricula del vehiculo: ').strip().upper()
     marca = input('Introduce la marca del vehiculo: ')
     modelo = input('Introduce el modelo del vehiculo: ')
     try:
@@ -103,6 +107,7 @@ def alta_vehiculo() -> Vehiculo | None:
         return None
 
     if v is not None:
+        # Metemos el vehiculo en la lista y guardamos
         lista_vehiculos.append(v)
         guardar_datos_json('vehiculos.json', lista_vehiculos)
         return v
@@ -114,15 +119,43 @@ def exportar_vehiculos_txt(lista_vehiculos: list) -> None:
             f.write('--- LISTADO DE VEHÍCULOS ---\n')
             for v in lista_vehiculos:
                 f.write(f'{v}\n')
-        print("Listado exportado correctamente a listado_vehiculos.txt")
+        print('Listado exportado correctamente a listado_vehiculos.txt')
     except Exception as e:
-        print(f"Error al exportar: {e}")
+        print(f'Error al exportar: {e}')
+
+
+def vehiculo_disponible(matricula: str) -> bool:
+    import json
+    import os
+    from datetime import datetime, timedelta
+
+    if not os.path.exists('historial.json'):
+        return True
+
+    try:
+        with open('historial.json', 'r', encoding='utf-8') as f:
+            historial = json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError):
+        return True
+
+    ahora = datetime.now()
+    for alquiler in historial:
+        if alquiler.get('vehiculo_matricula') == matricula:
+            fecha_str = alquiler['fecha']
+            dias = alquiler['dias']
+            fecha_alquiler = datetime.strptime(fecha_str, "%Y-%m-%d %H:%M:%S")
+            fecha_fin = fecha_alquiler + timedelta(days=dias)
+
+            if ahora <= fecha_fin:
+                return False  # Aun no ha pasado la fecha de fin
+    return True
 
 
 def mostrar_vehiculos(lista_vehiculos: list) -> None:
     print('--- VEHÍCULOS DISPONIBLES ---')
     for v in lista_vehiculos:
-        print(v)
+        if vehiculo_disponible(v.matricula):
+            print(v)
 
 
 def buscar_vehiculo_por_matricula(matricula: str) -> Vehiculo | None:
@@ -136,6 +169,7 @@ def buscar_vehiculo_por_matricula(matricula: str) -> Vehiculo | None:
         elif 'tipo_moto' in v:
             lista_vehiculos.append(Moto.alta_moto(v))
 
+    matricula = matricula.strip().upper()
     for v in lista_vehiculos:
         if hasattr(v, 'matricula') and v.matricula == matricula:
             return v
@@ -151,13 +185,28 @@ def alta_usuario(dni: str, lista_usuarios: list) -> Casual:
     nombre_completo = input('Introduce tu nombre completo: ')
     try:
         edad = int(input('Introduce tu edad: '))
+        if edad < 18:
+            raise EdadMinimaException(edad)
+    except EdadMinimaException as e:
+        print(e)
+        return None
     except ValueError:
-        print("Edad no válida, se asigna 18 por defecto.")
-        edad = 18
-    carnets = input('Introduce los carnets que tienes separados por comas (ej:B,A2,...): ')
-    lista_carnets = carnets.split(',')
+        print('Edad no válida. Registro cancelado.')
+        return None
 
-    nuevo_cliente = Casual(dni, nombre_completo, edad, lista_carnets)
+    direccion = input('Introduce tu dirección: ').strip()
+    carnets_input = input('Introduce los carnets que tienes separados por comas (ej:B,A2,...): ').upper()
+    validos = ['AM', 'A1', 'A2', 'A', 'B', 'B+E', 'B1', 'C1', 'C', 'C1+E', 'C+E', 'D1', 'D', 'D1+E', 'D+E', 'LCM',
+               'LVA']
+    lista_carnets = []
+    for c in carnets_input.split(','):
+        c_strip = c.strip()
+        if c_strip in validos and c_strip not in lista_carnets:
+            lista_carnets.append(c_strip)
+        elif c_strip and c_strip not in validos:
+            print(f'El carnet {c_strip} no es válido y no se añadirá.')
+
+    nuevo_cliente = Casual(dni.strip().upper(), nombre_completo, edad, lista_carnets, direccion)
     lista_usuarios.append(nuevo_cliente)
     guardar_datos_json('clientes.json', lista_usuarios)
 
@@ -228,3 +277,31 @@ def validar_cif(cif: str) -> bool:
         return letras_control[digito_final] == control
     else:
         return (str(digito_final) == control) or (letras_control[digito_final] == control)
+
+
+def guardar_historial_json(alquiler) -> None:
+    # Guarda un registro del alquiler en el archivo historial.json
+    archivo = 'historial.json'
+    historial = []
+
+    if os.path.exists(archivo):
+        try:
+            with open(archivo, 'r', encoding='utf-8') as f:
+                historial = json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            historial = []
+
+    import datetime
+    datos = {
+        'referencia': alquiler.numero_referencia,
+        'fecha': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'cliente_dni': alquiler.cliente.dni,
+        'vehiculo_matricula': alquiler.vehiculo.matricula,
+        'dias': alquiler.dias,
+        'precio_final': alquiler.preciofinal()
+    }
+
+    historial.append(datos)
+
+    with open(archivo, 'w', encoding='utf-8') as f:
+        json.dump(historial, f, indent=4)

@@ -1,9 +1,11 @@
 from clases.cliente import Cliente
-from clases.coche import Coche
+from clases.vehiculo import Vehiculo
 from random import randint
 
+
+# Gestiona un alquiler finalizado y crea su factura
 class Alquiler:
-    numero_referencia = 12345 #numero de referencia para identificar cada alquiler
+    numero_referencia = 12345  # numero de referencia para identificar cada alquiler
 
     def __init__(self, cliente: Cliente, vehiculo: Vehiculo, dias: int) -> None:
         self.cliente = cliente
@@ -16,7 +18,11 @@ class Alquiler:
             self._precio_final = self.preciofinal()
             self.mostrar_alquiler()
 
-    def poder_alquilar(self): #comprueba si se puede alquilar el vehiculo
+            # Guardar en el historial
+            from funciones import guardar_historial_json
+            guardar_historial_json(self)
+
+    def poder_alquilar(self):  # comprueba si se puede alquilar el vehiculo
         tipo_vehiculo = type(self.vehiculo).__name__
 
         if self.vehiculo.estado != 'Disponible':
@@ -28,35 +34,40 @@ class Alquiler:
         elif self.vehiculo.carnet_requerido not in self.cliente.carnets:
             print(f'No se puede alquilar {tipo_vehiculo} sin el carnet {self.vehiculo.carnet_requerido}')
             return False
-        elif self.dias < 1:
-            print(f'El mínimo es un día para poder alquilar')
+        elif self.dias < 1 or self.dias > 100:
+            print(f'Los días de alquiler deben ser entre 1 y 100')
             return False
         else:
+            from funciones import vehiculo_disponible
+            if not vehiculo_disponible(self.vehiculo.matricula):
+                print(f'El vehículo {self.vehiculo.matricula} se encuentra alquilado en estas fechas.')
+                return False
             return True
 
-    def crear_referencia(self): #crea la referencia del alquiler
+    def crear_referencia(self):  # crea la referencia del alquiler
         type(self).numero_referencia += 1
 
-    def calcular_presupuesto(self) -> float: #calcula el presupuesto básico del alquiler
+    def calcular_presupuesto(self) -> float:  # calcula el presupuesto básico del alquiler
         # Fix: Usar calcular_tarifa() para respetar el polimorfismo y LSP
         tarifa_base = self.vehiculo.calcular_tarifa(self.dias)
         _precio = tarifa_base * (1.3 if self.cliente.edad < 25 else 1)
         return _precio
 
-    def sumar_gastado_cliente(self) -> float: #suma el gasto al cliente y comprueba si es premium para calcular el descuento
+    def sumar_gastado_cliente(
+            self) -> float:  # suma el gasto al cliente y comprueba si es premium para calcular el descuento
         ya_era_premium = self.cliente.premium
         self.cliente.total_gastado += self._precio
         self.cliente.comprobar_premium()
-        if ya_era_premium: #si ya era premium, se le suma el gasto a su saldo premium para llevar la cuenta de cuanto lleva gastado
+        if ya_era_premium:  # si ya era premium, se le suma el gasto a su saldo premium para llevar la cuenta de cuanto lleva gastado
             self.cliente.gastado_premium += self._precio
         self._descuento = self.cliente.descuento_premium()
         return self._descuento
 
-    def preciofinal(self): #calcula el precio final del alquiler
+    def preciofinal(self):  # calcula el precio final del alquiler
         _precio_final = self._precio - self._descuento
         return _precio_final
 
-    def mostrar_alquiler(self): #muestra la factura con todos los datos del alquiler
+    def mostrar_alquiler(self):  # muestra la factura con todos los datos del alquiler
         print('=======================================================')
         print(f'FACTURA ALQUILER {self.numero_referencia}')
         print('-------------------------------------------------------')
