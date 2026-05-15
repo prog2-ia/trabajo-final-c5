@@ -6,7 +6,7 @@ from clases.coche import Coche
 from clases.moto import Moto
 from clases.casual import Casual
 from clases.vehiculo import Vehiculo
-from excepciones import EdadMinimaException
+from excepciones import EdadMinimaException, DniInvalidoException, MatriculaInvalidaException
 
 '''
 PARA EMPRESAS:
@@ -47,6 +47,12 @@ def alta_vehiculo() -> Vehiculo | None:
 
     tip_veh = input('Ingrese el tipo de vehiculo (coche/moto/furgoneta): ').strip().lower()
     matricula = input('Introduce la matricula del vehiculo: ').strip().upper()
+    try:
+        validar_matricula(matricula)
+    except MatriculaInvalidaException as e:
+        print(f'ERROR: {e}')
+        return None
+
     marca = input('Introduce la marca del vehiculo: ')
     modelo = input('Introduce el modelo del vehiculo: ')
     try:
@@ -64,6 +70,7 @@ def alta_vehiculo() -> Vehiculo | None:
     tipo_combustible = input('Introduce el tipo combustible del vehiculo: ')
     estado = input('Introduce el estado del vehiculo: ')
     extras = input('Introduce los extras del vehiculo: ')
+    empresa = input('Introduce el nombre de la empresa a la que pertenece: ')
 
     v = None
     if tip_veh == 'coche':
@@ -79,7 +86,7 @@ def alta_vehiculo() -> Vehiculo | None:
 
         v = Coche(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia,
                   precio_dia, estado, extras,
-                  tipo_coche, plazas, puertas, capacidad_maletero, carnet_requerido)
+                  tipo_coche, plazas, puertas, capacidad_maletero, carnet_requerido, empresa)
 
     elif tip_veh == 'moto':
         tipo_moto = input('Introduce el tipo de moto: ')
@@ -92,7 +99,7 @@ def alta_vehiculo() -> Vehiculo | None:
 
         v = Moto(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia,
                  precio_dia, estado, extras,
-                 tipo_moto, cilindrada, carnet_requerido)
+                 tipo_moto, cilindrada, carnet_requerido, empresa)
 
     elif tip_veh == 'furgoneta':
         tipo_furgoneta = input('Introduce el tipo de furgoneta: ')
@@ -101,7 +108,7 @@ def alta_vehiculo() -> Vehiculo | None:
 
         v = Furgoneta(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos,
                       autonomia, precio_dia, estado, extras,
-                      tipo_furgoneta, capacidad_carga, carnet_requerido)
+                      tipo_furgoneta, capacidad_carga, carnet_requerido, empresa)
     else:
         print('ERROR: El tipo de vehiculo no es valido')
         return None
@@ -111,17 +118,6 @@ def alta_vehiculo() -> Vehiculo | None:
         lista_vehiculos.append(v)
         guardar_datos_json('vehiculos.json', lista_vehiculos)
         return v
-
-
-def exportar_vehiculos_txt(lista_vehiculos: list) -> None:
-    try:
-        with open('listado_vehiculos.txt', 'w', encoding='utf-8') as f:
-            f.write('--- LISTADO DE VEHÍCULOS ---\n')
-            for v in lista_vehiculos:
-                f.write(f'{v}\n')
-        print('Listado exportado correctamente a listado_vehiculos.txt')
-    except Exception as e:
-        print(f'Error al exportar: {e}')
 
 
 def vehiculo_disponible(matricula: str) -> bool:
@@ -215,24 +211,50 @@ def alta_usuario(dni: str, lista_usuarios: list) -> Casual:
 
 def verificar_id(id_cliente: str) -> bool:
     # Verifica si un DNI o NIE es válido
-    id_cliente = id_cliente.strip().upper().replace('-', '')
+    id_cliente_clean = id_cliente.strip().upper().replace('-', '')
 
-    if len(id_cliente) != 9:
-        return False
+    if len(id_cliente_clean) != 9:
+        raise DniInvalidoException(id_cliente)
 
     letras = 'TRWAGMYFPDXBNJZSQVHLCKE'
     mapeo_nie = {'X': '0', 'Y': '1', 'Z': '2'}
 
-    cuerpo_num = id_cliente[:-1]
-    letra_final = id_cliente[-1]
+    cuerpo_num = id_cliente_clean[:-1]
+    letra_final = id_cliente_clean[-1]
 
     if cuerpo_num[0] in mapeo_nie:
         cuerpo_num = mapeo_nie[cuerpo_num[0]] + cuerpo_num[1:]
 
     if not cuerpo_num.isdigit():
-        return False
+        raise DniInvalidoException(id_cliente)
 
-    return letras[int(cuerpo_num) % 23] == letra_final
+    if letras[int(cuerpo_num) % 23] != letra_final:
+        raise DniInvalidoException(id_cliente)
+
+    return True
+
+
+def validar_matricula(matricula: str) -> bool:
+    limpiar_matricula = matricula.strip().upper().replace(' ', '').replace('-', '')
+
+    # Comprobar que la longitud es exactamente 7 caracteres
+    if len(limpiar_matricula) != 7:
+        raise MatriculaInvalidaException(matricula)
+
+    numeros = limpiar_matricula[:4]
+    letras = limpiar_matricula[4:]
+    vocales = ['A', 'E', 'I', 'O', 'U']
+
+    # Comprobar que los 4 primeros son numeros y los 3 ultimos son letras
+    if not numeros.isdigit() or not letras.isalpha():
+        raise MatriculaInvalidaException(matricula)
+
+    # Comprobar que no hay vocales en las letras
+    for letra in letras:
+        if letra in vocales:
+            raise MatriculaInvalidaException(matricula)
+
+    return True
 
 
 def validar_cif(cif: str) -> bool:
@@ -294,7 +316,7 @@ def guardar_historial_json(alquiler) -> None:
     import datetime
     datos = {
         'referencia': alquiler.numero_referencia,
-        'fecha': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'fecha': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'cliente_dni': alquiler.cliente.dni,
         'vehiculo_matricula': alquiler.vehiculo.matricula,
         'dias': alquiler.dias,

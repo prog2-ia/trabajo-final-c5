@@ -1,5 +1,5 @@
 import os
-from funciones import *
+from funciones import verificar_id, validar_cif, cargar_datos_json, guardar_datos_json
 from menu import *
 from clases.cliente import Cliente
 from clases.casual import Casual
@@ -7,6 +7,7 @@ from clases.coche import Coche
 from clases.furgoneta import Furgoneta
 from clases.moto import Moto
 from clases.empresa import Empresa
+from excepciones import DniInvalidoException
 
 
 def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
@@ -25,12 +26,14 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
             break
 
         if respuesta == 'cliente':
-            usuario = input('Introduce tu DNI/NIE (o "volver" para atrás): ').strip().upper()
+            usuario = input('Introduce tu DNI/NIE (o \'volver\' para atrás): ').strip().upper()
             if usuario == 'VOLVER':
                 continue
 
-            if not verificar_id(usuario):
-                print('ERROR: DNI/NIE no válido.')
+            try:
+                verificar_id(usuario)
+            except DniInvalidoException as e:
+                print(f'ERROR: {e}')
                 respuesta = ''
                 continue
 
@@ -52,7 +55,7 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
             menu_cliente(cliente_actual, lista_vehiculos)
 
         elif respuesta == 'empresa':
-            cif = input('Introduce el CIF de la empresa o "volver": ').strip().upper()
+            cif = input('Introduce el CIF de la empresa o \'volver\': ').strip().upper()
             if cif == 'VOLVER':
                 continue
 

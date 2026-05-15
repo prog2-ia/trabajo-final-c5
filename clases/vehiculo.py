@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class Vehiculo(ABC):
     def __init__(self, matricula: str, marca: str, modelo: str, anyo: int, color: str, kilometros: float,
                  tipo_combustible: str, consumo: float, caballos: int,
-                 autonomia: float, precio_dia: float, estado: str, extras: str) -> None:
+                 autonomia: float, precio_dia: float, estado: str, extras: str, empresa: str = '') -> None:
         self.matricula = matricula
         self.marca = marca
         self.modelo = modelo
@@ -18,10 +18,17 @@ class Vehiculo(ABC):
         self.__precio_dia = float(precio_dia)  #privado para no modificarlo directamente
         self.estado = estado
         self.extras = extras
+        self.empresa = empresa
 
     #Representacion formal para desarrollo
     def __repr__(self) -> str:
-        return f"{type(self).__name__}(matricula='{self.matricula}', marca='{self.marca}', modelo='{self.modelo}')"
+        return f'{type(self).__name__}(matricula=\'{self.matricula}\', marca=\'{self.marca}\', modelo=\'{self.modelo}\')'
+
+    #Metodo magico para comparar dos vehiculos por su matricula
+    def __eq__(self, otro):
+        if isinstance(otro, Vehiculo):
+            return self.matricula == otro.matricula
+        return False
 
     #Metodo estatico de utilidad para formato de matricula
     @staticmethod

@@ -3,9 +3,9 @@ from clases.vehiculo import Vehiculo
 #Vehiculo de dos ruedas con descuento
 class Moto(Vehiculo):
     def __init__(self, matricula: str, marca: str, modelo: str, anyo: int, color: str, kilometros: float, tipo_combustible: str, consumo: float, caballos: int, autonomia: float, precio_dia: float, estado: str, extras: str,
-                 tipo_moto: str, cilindrada: int, carnet_requerido: str) -> None:
+                 tipo_moto: str, cilindrada: int, carnet_requerido: str, empresa: str = '') -> None:
 
-        super().__init__(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras)
+        super().__init__(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras, empresa)
 
         self.tipo_moto = tipo_moto
         self.cilindrada = cilindrada

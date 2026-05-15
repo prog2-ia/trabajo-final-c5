@@ -17,7 +17,8 @@
         "plazas": "5",
         "puertas": "5",
         "capacidad_maletero": "350",
-        "carnet_requerido": "B"
+        "carnet_requerido": "B",
+        "empresa": "Alquileres Paco"
     },
     {
         "matricula": "5678DEF",
@@ -37,7 +38,8 @@
         "plazas": "5",
         "puertas": "4",
         "capacidad_maletero": "425",
-        "carnet_requerido": "B"
+        "carnet_requerido": "B",
+        "empresa": "Alquileres Paco"
     },
     {
         "matricula": "9012GHI",

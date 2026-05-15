@@ -13,9 +13,9 @@ class Alquiler:
         self.dias = dias
         if self.poder_alquilar():
             self.crear_referencia()
-            self._precio = self.calcular_presupuesto()
+            self.precio_base = self.calcular_presupuesto()
             self.sumar_gastado_cliente()
-            self._precio_final = self.preciofinal()
+            self.precio_a_pagar = self.preciofinal()
             self.mostrar_alquiler()
 
             # Guardar en el historial
@@ -48,24 +48,30 @@ class Alquiler:
         type(self).numero_referencia += 1
 
     def calcular_presupuesto(self) -> float:  # calcula el presupuesto básico del alquiler
-        # Fix: Usar calcular_tarifa() para respetar el polimorfismo y LSP
+        # Calculamos la tarifa dependiendo del vehiculo
         tarifa_base = self.vehiculo.calcular_tarifa(self.dias)
-        _precio = tarifa_base * (1.3 if self.cliente.edad < 25 else 1)
-        return _precio
+
+        # Los menores de 25 pagan mas
+        if self.cliente.edad < 25:
+            precio_base = tarifa_base * 1.3
+        else:
+            precio_base = tarifa_base
+
+        return precio_base
 
     def sumar_gastado_cliente(
             self) -> float:  # suma el gasto al cliente y comprueba si es premium para calcular el descuento
         ya_era_premium = self.cliente.premium
-        self.cliente.total_gastado += self._precio
+        self.cliente.total_gastado += self.precio_base
         self.cliente.comprobar_premium()
         if ya_era_premium:  # si ya era premium, se le suma el gasto a su saldo premium para llevar la cuenta de cuanto lleva gastado
-            self.cliente.gastado_premium += self._precio
-        self._descuento = self.cliente.descuento_premium()
-        return self._descuento
+            self.cliente.gastado_premium += self.precio_base
+        self.descuento_aplicado = self.cliente.descuento_premium()
+        return self.descuento_aplicado
 
     def preciofinal(self):  # calcula el precio final del alquiler
-        _precio_final = self._precio - self._descuento
-        return _precio_final
+        precio_a_pagar = self.precio_base - self.descuento_aplicado
+        return precio_a_pagar
 
     def mostrar_alquiler(self):  # muestra la factura con todos los datos del alquiler
         print('=======================================================')
@@ -88,4 +94,3 @@ class Alquiler:
         print(f'TOTAL:  {self._precio_final} €')
         print('=======================================================')
         print()
-
