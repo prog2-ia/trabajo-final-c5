@@ -28,3 +28,45 @@ Si lo probáis, podéis darle a iniciar como cliente y poner el vuestro para cre
 Lo mismo si iniciáis como empresa: os pedirá un CIF válido (podéis usar el de ejemplo que sale en pantalla: 'B12345674'). De momento fuciona solo dar de alta un vehículo.
 
 
+
+## Esquema del Proyecto (Archivos y Funciones)
+
+Aquí dejamos un resumen rápido de cómo está estructurado el código y para qué sirve cada cosa:
+
+### Archivos Principales
+* `main.py`
+  * `if __name__ == '__main__':` Carga todos los datos de los archivos `.json` al empezar.
+  * `inicio`: Es la función principal que arranca el programa y te pregunta si eres cliente o empresa.
+* `menu.py`
+  * `menu_cliente`: Aquí está toda la lógica del menú interactivo cuando entras como cliente (alquilar, presupuestos, ver datos...).
+  * `menu_empresa`: El menú para cuando entras como empresa.
+* `funciones.py` (Aquí están casi todas las funciones sueltas que usamos en el proyecto)
+  * `cargar_datos_json`: Lee la información guardada.
+  * `guardar_datos_json`: Guarda la información cuando hacemos cambios.
+  * `alta_vehiculo`: Te va pidiendo por pantalla todos los datos para crear un coche/moto/furgoneta nuevo.
+  * `vehiculo_disponible`: Comprueba en el historial si un vehículo ya está alquilado en esas fechas o no.
+  * `mostrar_vehiculos`: Imprime por pantalla la lista de vehículos libres.
+  * `buscar_vehiculo_por_matricula`: Busca un vehículo en la lista usando su matrícula.
+  * `alta_usuario`: Pide los datos por pantalla para registrar a un cliente nuevo.
+  * `verificar_id`: Comprueba que la letra y los números del DNI/NIE sean correctos.
+  * `validar_cif`: Comprueba que el formato del CIF de la empresa sea válido.
+  * `validar_matricula`: Comprueba que las matrículas cumplan el formato (4 números y 3 consonantes).
+  * `guardar_historial_json`: Guarda el registro (factura) cada vez que alguien alquila.
+* `excepciones.py`: Archivo donde guardamos errores (Edad mínima, DNI falso o Matrícula falsa).
+
+### Archivos de Datos (.json)
+* `clientes.json`: Guarda los datos de la gente registrada.
+* `empresas.json`: Guarda los datos de las empresas dueñas de los coches.
+* `vehiculos.json`: La lista con todos los vehículos de la app.
+* `historial.json`: Los tickets y recibos de los alquileres pasados.
+
+### Clases (Orientación a Objetos)
+Todas las clases las tenemos metidas en la carpeta `clases/` separadas en archivos para que quede más limpio:
+* `Cliente`: La clase base (o padre) para los usuarios.
+  * `Casual`: Subclase de cliente normal.
+  * `Premium`: Subclase de cliente VIP con descuentos especiales.
+* `Empresa`: Para crear las empresas de alquiler.
+* `Vehiculo`: Clase padre (Abstracta) para todo lo que tenga ruedas.
+  * `Coche`, `Moto`, `Furgoneta`: Subclases de Vehiculo con sus cosas específicas (capacidad del maletero, carga, etc).
+* `Alquiler`: Clase para calcular y generar el recibo final cuando confirmas que alquilas algo.
+* `Presupuesto`: Clase parecida a Alquiler pero que solo te muestra cuánto te va a costar, sin confirmar la reserva.
