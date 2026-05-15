@@ -1,60 +1,99 @@
-from funciones import *
+import os
+from funciones import verificar_id, validar_cif, cargar_datos_json, guardar_datos_json
 from menu import *
-import json
+from clases.cliente import Cliente
+from clases.casual import Casual
+from clases.coche import Coche
+from clases.furgoneta import Furgoneta
+from clases.moto import Moto
+from clases.empresa import Empresa
+from excepciones import DniInvalidoException
 
 
-
-def inicio():
+def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
     respuesta = ''
-    datos = open('clientes.json', 'r', encoding='utf-8')
-    lista_usuarios = json.load(datos)
-    datos.close()
     print()
     print('Bienvenido al sistema')
     print(('-------------------------------------------'))
 
-    while respuesta != 'cliente' and respuesta != 'empresa':
-        print('¿Como quiere acceder?')
-        respuesta = input('cliente/empresa: ')
+    while True:
+        #Preguntamos al usuario quien es
+        print('\n¿Como quiere acceder?')
+        respuesta = input('cliente/empresa/salir: ').strip().lower()
+
+        if respuesta == 'salir':
+            print('Saliendo del sistema...')
+            break
 
         if respuesta == 'cliente':
-            usuario = input('Introduce tu DNI/NIE: ')
-            
-            from funciones import verificar_id
-            if not verificar_id(usuario):
-                print('ERROR: DNI/NIE no válido.')
+            usuario = input('Introduce tu DNI/NIE (o \'volver\' para atrás): ').strip().upper()
+            if usuario == 'VOLVER':
+                continue
+
+            try:
+                verificar_id(usuario)
+            except DniInvalidoException as e:
+                print(f'ERROR: {e}')
                 respuesta = ''
                 continue
-            
-            if usuario not in lista_usuarios:
-                cliente_actual = alta_usuario(usuario)
-                lista_usuarios.append(usuario)
-                datos = open('clientes.json', 'w', encoding='utf-8')
-                json.dump(lista_usuarios, datos, indent=4, ensure_ascii=False)
-                datos.close()
 
-            else:
-                from clases.cliente import Cliente
-                #Creamos un cliente temporal porque el json original solo guardaba strings 
-                cliente_actual = Cliente(usuario, 'Cliente Habitual', 30, ['B'])
+            cliente_actual = next((c for c in lista_usuarios if c.dni == usuario), None)
 
-            menu_cliente(cliente_actual)
+            if not cliente_actual:
+                #Si no lo encuentra, creamos un usuario nuevo
+                print('Usuario no encontrado. Procediendo a dar de alta.')
+                cliente_actual = alta_usuario(usuario, lista_usuarios)
+                if not cliente_actual:
+                    respuesta = ''
+                    continue
+
+            if cliente_actual.edad < 18:
+                print('Error: Solo los mayores de edad pueden acceder a la plataforma.')
+                respuesta = ''
+                continue
+
+            menu_cliente(cliente_actual, lista_vehiculos)
 
         elif respuesta == 'empresa':
-            cif = input('Introduce el CIF de la empresa (ej: B12345674): ')
-            
-            from funciones import validar_cif
+            cif = input('Introduce el CIF de la empresa o \'volver\': ').strip().upper()
+            if cif == 'VOLVER':
+                continue
+
             if not validar_cif(cif):
                 print('ERROR: CIF de empresa no válido.')
                 respuesta = ''
                 continue
-            
-            menu_empresa()
+
+            menu_empresa(lista_vehiculos)
 
         else:
-            print()
-            print('ERROR: Acceso Invalido')
+            print('\nOpción no válida. Por favor, escriba \'cliente\', \'empresa\' o \'salir\'.')
 
 
 if __name__ == '__main__':
-    inicio()
+    #Cargamos datos JSON y los convertimos en objetos
+    lista_usuarios_dict = cargar_datos_json('clientes.json')
+    lista_usuarios = []
+    for u in lista_usuarios_dict:
+        #Convertimos el texto del json en objeto Cliente
+        #Recuperamos propiedades internas si existen
+        cliente = Casual.alta_casual(u)
+        if '_premium' in u: cliente._premium = u['_premium']
+        if '_total_gastado' in u: cliente._total_gastado = u['_total_gastado']
+        if '_gastado_premium' in u: cliente._gastado_premium = u['_gastado_premium']
+        lista_usuarios.append(cliente)
+
+    lista_vehiculos_dict = cargar_datos_json('vehiculos.json')
+    lista_vehiculos = []
+    for v in lista_vehiculos_dict:
+        if 'tipo_coche' in v:
+            lista_vehiculos.append(Coche.alta_coche(v))
+        elif 'tipo_furgoneta' in v:
+            lista_vehiculos.append(Furgoneta.alta_furgoneta(v))
+        elif 'tipo_moto' in v:
+            lista_vehiculos.append(Moto.alta_moto(v))
+
+    lista_empresas_dict = cargar_datos_json('empresas.json')
+    lista_empresas = [Empresa.crear_empresa(e) for e in lista_empresas_dict]
+
+    inicio(lista_usuarios, lista_vehiculos)

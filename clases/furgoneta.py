@@ -1,10 +1,11 @@
 from clases.vehiculo import Vehiculo
 
+#Vehiculo de carga pesada
 class Furgoneta(Vehiculo):
-    def __init__(self, matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras,
-                 tipo_furgoneta, capacidad_carga, carnet_requerido):
+    def __init__(self, matricula: str, marca: str, modelo: str, anyo: int, color: str, kilometros: float, tipo_combustible: str, consumo: float, caballos: int, autonomia: float, precio_dia: float, estado: str, extras: str,
+                 tipo_furgoneta: str, capacidad_carga: float, carnet_requerido: str, empresa: str = '') -> None:
 
-        super().__init__(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras)
+        super().__init__(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos, autonomia, precio_dia, estado, extras, empresa)
         self.tipo_furgoneta = tipo_furgoneta
         self.capacidad_carga = capacidad_carga
         self.carnet_requerido = carnet_requerido
@@ -13,6 +14,7 @@ class Furgoneta(Vehiculo):
         #tiene un cargo extra por ser furgoneta, ya que necesitan más mantenimiento...
         return (self.precio_dia * dias) + 10
 
+    #Instancia la clase a partir de un diccionario JSON
     @classmethod
     def alta_furgoneta(cls, dicc):
         return cls(**dicc)

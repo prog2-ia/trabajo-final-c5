@@ -1,5 +1,36 @@
 [
-    "454",
-    "21",
-    "Y0866893Z"
+    {
+        "dni": "Y0866893Z",
+        "nombre_completo": "J C",
+        "edad": 18,
+        "carnets": [
+            "AM",
+            "A1",
+            "A2",
+            "B"
+        ],
+        "direccion": "",
+        "_descuento": 0,
+        "_premium": false,
+        "_gastado_premium": 0,
+        "_total_gastado": 0,
+        "_total_ahorrado": 0
+    },
+    {
+        "dni": "X4168001X",
+        "nombre_completo": "ma",
+        "edad": 50,
+        "carnets": [
+            "B",
+            "AM",
+            "A1",
+            "A2"
+        ],
+        "direccion": "crrs",
+        "_descuento": 0,
+        "_premium": false,
+        "_gastado_premium": 0,
+        "_total_gastado": 0,
+        "_total_ahorrado": 0
+    }
 ]

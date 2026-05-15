@@ -1,0 +1,17 @@
+[
+    {
+        "cif": "B12345678",
+        "nombre": "Alquileres Paco",
+        "lista_sucursales": ["Madrid", "Barcelona", "Valencia"]
+    },
+    {
+        "cif": "B23456789",
+        "nombre": "Alquileres Pepe",
+        "lista_sucursales": ["Sevilla", "Bilbao", "Malaga"]
+    },
+    {
+        "cif": "B34567890",
+        "nombre": "Rent a Car",
+        "lista_sucursales": ["Sevilla", "Bilbao", "Malaga"]
+    }
+]
