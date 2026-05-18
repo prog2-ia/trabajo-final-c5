@@ -23,10 +23,12 @@ python main.py
 
 ## Ejemplos para probar
 
-Si lo probáis, podéis darle a iniciar como cliente y poner el vuestro para crear un usuario que se guardará en el archivo json de clientes, o uno cualquiera como por ejemplo 'Y0866893Z' para acceder a uno ya creado. Luego le dais a alquilar o sacar presupuesto. Os pedirá la matrícula de un coche a elegir y los días. Veréis cómo el programa genera e imprime automáticamente el presupuesto o la factura final. Hay un sistema de descuentos para clientes premium si llevas más de 500€ gastados, cosa que el menú calcula automáticamente simulando a un usuario real.
+Si lo probáis, podéis darle a iniciar como cliente y poner el vuestro DNI o NIE para crear un usuario que se guardará en el archivo json de clientes, o uno cualquiera como por ejemplo '55019506X' para acceder a uno ya creado. Luego le dais a alquilar o sacar presupuesto. Os pedirá la matrícula de un coche a elegir y los días. Veréis cómo el programa genera e imprime automáticamente el presupuesto o la factura final. Hay un sistema de descuentos para clientes premium si llevas más de 500€ gastados, cosa que el menú calcula automáticamente simulando a un usuario real. A la hora de alquilar, el programa tiene cuenta que no esté alquilado, tomando la fecha actual del dispositivo, por lo que podréis probar a hacer un alquiler y luego ver en el historial de la cuenta de ese cliente cómo se ha generado y guardado, además de que luego ese vehículo deja de aparecer en la lista de vehículos disponibles.
 
-Lo mismo si iniciáis como empresa: os pedirá un CIF válido (podéis usar el de ejemplo que sale en pantalla: 'B12345674'). De momento fuciona solo dar de alta un vehículo.
+Lo mismo si iniciáis como empresa: os pedirá un CIF válido (podéis usar por ejemplo el 'B12345674').
 
+### Copia de Seguridad Automática
+También hemos implementado un sistema de copias de seguridad automáticas. Al salir del programa de forma escribiendo 'salir' en el menú principal, el sistema utiliza las librerías `os` y `shutil` para rastrear todos los archivos con datos `.json` y hacer una copia de respaldo en una única carpeta llamada `copia_seguridad` que se actualiza. Podéis probar a entrar, hacer alguna modificación (como alquilar un coche o cambiar la edad de vuestro cliente) y luego salir del programa para comprobar cómo se actualiza esta carpeta.
 
 
 ## Esquema del Proyecto (Archivos y Funciones)

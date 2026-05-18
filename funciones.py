@@ -6,7 +6,8 @@ from clases.coche import Coche
 from clases.moto import Moto
 from clases.casual import Casual
 from clases.vehiculo import Vehiculo
-from excepciones import EdadMinimaException, DniInvalidoException, MatriculaInvalidaException
+from excepciones import EdadMinimaException, DniInvalidoException, MatriculaInvalidaException, CifInvalidoException, \
+    TipoVehiculoInvalidoException
 
 '''
 PARA EMPRESAS:
@@ -46,6 +47,13 @@ def alta_vehiculo() -> Vehiculo | None:
             lista_vehiculos.append(Moto.alta_moto(v))
 
     tip_veh = input('Ingrese el tipo de vehiculo (coche/moto/furgoneta): ').strip().lower()
+    if tip_veh not in ['coche', 'moto', 'furgoneta']:
+        try:
+            raise TipoVehiculoInvalidoException(tip_veh)
+        except TipoVehiculoInvalidoException as e:
+            print(f'ERROR: {e}')
+            return None
+
     matricula = input('Introduce la matricula del vehiculo: ').strip().upper()
     try:
         validar_matricula(matricula)
@@ -109,15 +117,13 @@ def alta_vehiculo() -> Vehiculo | None:
         v = Furgoneta(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos,
                       autonomia, precio_dia, estado, extras,
                       tipo_furgoneta, capacidad_carga, carnet_requerido, empresa)
-    else:
-        print('ERROR: El tipo de vehiculo no es valido')
-        return None
+        tipo_furgoneta, capacidad_carga, carnet_requerido, empresa)
 
-    if v is not None:
+        if v is not None:
         # Metemos el vehiculo en la lista y guardamos
-        lista_vehiculos.append(v)
+            lista_vehiculos.append(v)
         guardar_datos_json('vehiculos.json', lista_vehiculos)
-        return v
+    return v
 
 
 def vehiculo_disponible(matricula: str) -> bool:
@@ -262,18 +268,18 @@ def validar_cif(cif: str) -> bool:
     cif = cif.upper().strip()
 
     if len(cif) != 9:
-        return False
+        raise CifInvalidoException(cif)
 
     tipo = cif[0]
     numeros = cif[1:8]
     control = cif[8]
 
     if not tipo.isalpha() or not numeros.isdigit():
-        return False
+        raise CifInvalidoException(cif)
 
     letras_validas = 'ABCDEFGHJKLMNPQRSUVW'
     if tipo not in letras_validas:
-        return False
+        raise CifInvalidoException(cif)
 
     pares = 0
     impares = 0
@@ -294,11 +300,14 @@ def validar_cif(cif: str) -> bool:
     letras_control = 'JABCDEFGHI'
 
     if tipo in 'ABEH':
-        return str(digito_final) == control
+        if str(digito_final) != control: raise CifInvalidoException(cif)
     elif tipo in 'KPQS':
-        return letras_control[digito_final] == control
+        if letras_control[digito_final] != control: raise CifInvalidoException(cif)
     else:
-        return (str(digito_final) == control) or (letras_control[digito_final] == control)
+        if not ((str(digito_final) == control) or (
+                letras_control[digito_final] == control)): raise CifInvalidoException(cif)
+
+    return True
 
 
 def guardar_historial_json(alquiler) -> None:
@@ -327,3 +336,25 @@ def guardar_historial_json(alquiler) -> None:
 
     with open(archivo, 'w', encoding='utf-8') as f:
         json.dump(historial, f, indent=4)
+
+
+def crear_copia_seguridad():
+    import shutil
+    import os
+
+    # Usamos siempre el mismo directorio para no crear cientos de carpetas
+    directorio_backup = 'copia_seguridad'
+
+    try:
+        # Solo lo creamos si no existe previamente
+        if not os.path.exists(directorio_backup):
+            os.makedirs(directorio_backup)
+
+        # Listado de ficheros en directorios usando scandir, como en los apuntes
+        with os.scandir('.') as entradas:
+            for entrada in entradas:
+                if entrada.is_file() and entrada.name.endswith('.json'):
+                    shutil.copy(entrada.name, directorio_backup)
+        print(f'Copia de seguridad actualizada con éxito en el directorio: {directorio_backup}')
+    except OSError as e:
+        print(f'Error al actualizar la copia de seguridad: {e.strerror}')

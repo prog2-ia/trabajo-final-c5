@@ -27,3 +27,23 @@ class MatriculaInvalidaException(Exception):
 
     def __str__(self):
         return f'{self.mensaje}: {self.matricula}'
+
+class CifInvalidoException(Exception):
+    #Excepción para cuando el CIF introducido no es válido
+    def __init__(self, cif, mensaje='El CIF de empresa introducido no es válido'):
+        self.cif = cif
+        self.mensaje = mensaje
+        super().__init__(self.mensaje)
+
+    def __str__(self):
+        return f'{self.mensaje}: {self.cif}'
+
+class TipoVehiculoInvalidoException(Exception):
+    #Excepción para cuando el tipo de vehículo no es coche, moto o furgoneta
+    def __init__(self, tipo, mensaje='El tipo de vehículo introducido no es válido'):
+        self.tipo = tipo
+        self.mensaje = mensaje
+        super().__init__(self.mensaje)
+
+    def __str__(self):
+        return f'{self.mensaje}: {self.tipo}'
