@@ -141,6 +141,14 @@ def menu_empresa(lista_vehiculos: list) -> None:
     print(('-' * 25))
 
     while respuesta != '1' and respuesta != '2' and respuesta != '3' and respuesta != '4' and respuesta != '5':
+        print('\n--- TODOS LOS VEHÍCULOS DEL SISTEMA ---')
+        if not lista_vehiculos:
+            print("No hay vehículos registrados actualmente.")
+        else:
+            for v in lista_vehiculos:
+                print(v)
+        print('---------------------------------------\n')
+
         print('¿Que desea?'.center(25))
         print('1: Dar de alta un vehiculo')
         print('2: Dar de baja un vehiculo')
