@@ -1,5 +1,5 @@
 import os
-from funciones import verificar_id, validar_cif, cargar_datos_json, guardar_datos_json
+from funciones import verificar_id, validar_cif, cargar_datos_json, guardar_datos_json, alta_usuario
 from menu import *
 from clases.cliente import Cliente
 from clases.casual import Casual
@@ -7,7 +7,7 @@ from clases.coche import Coche
 from clases.furgoneta import Furgoneta
 from clases.moto import Moto
 from clases.empresa import Empresa
-from excepciones import DniInvalidoException
+from excepciones import DniInvalidoException, CifInvalidoException
 
 
 def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
@@ -22,6 +22,9 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
         respuesta = input('cliente/empresa/salir: ').strip().lower()
 
         if respuesta == 'salir':
+            from funciones import crear_copia_seguridad
+            print('Realizando copia de seguridad automática antes de salir...')
+            crear_copia_seguridad()
             print('Saliendo del sistema...')
             break
 
@@ -59,8 +62,10 @@ def inicio(lista_usuarios: list, lista_vehiculos: list) -> None:
             if cif == 'VOLVER':
                 continue
 
-            if not validar_cif(cif):
-                print('ERROR: CIF de empresa no válido.')
+            try:
+                validar_cif(cif)
+            except CifInvalidoException as e:
+                print(f'ERROR: {e}')
                 respuesta = ''
                 continue
 

@@ -32,5 +32,20 @@
         "_gastado_premium": 0,
         "_total_gastado": 0,
         "_total_ahorrado": 0
+    },
+    {
+        "dni": "55019506X",
+        "nombre_completo": "Lucas Papi Tendero",
+        "edad": 19,
+        "carnets": [
+            "B",
+            "A1"
+        ],
+        "direccion": "La UA",
+        "_descuento": 0,
+        "_premium": false,
+        "_gastado_premium": 0,
+        "_total_gastado": 0,
+        "_total_ahorrado": 0
     }
 ]

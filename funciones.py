@@ -117,13 +117,12 @@ def alta_vehiculo() -> Vehiculo | None:
         v = Furgoneta(matricula, marca, modelo, anyo, color, kilometros, tipo_combustible, consumo, caballos,
                       autonomia, precio_dia, estado, extras,
                       tipo_furgoneta, capacidad_carga, carnet_requerido, empresa)
-        tipo_furgoneta, capacidad_carga, carnet_requerido, empresa)
 
-        if v is not None:
+    if v is not None:
         # Metemos el vehiculo en la lista y guardamos
-            lista_vehiculos.append(v)
+        lista_vehiculos.append(v)
         guardar_datos_json('vehiculos.json', lista_vehiculos)
-    return v
+        return v
 
 
 def vehiculo_disponible(matricula: str) -> bool:
