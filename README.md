@@ -17,9 +17,12 @@ Básicamente tiene dos modos:
 
 No hace falta instalar nada, solo tener Python instalado. Todo lo demás (como el módulo json) ya viene con Python.
 
-Para arrancar el programa, solo tienes que ejecutar desde la terminal:
-
-python main.py
+Para arrancar el programa:
+ 1 - Descargar y descomprimir el .zip del proyecto
+ 2 - Abrir la terminal y ubicarse con el comando cd en la carpeta del proyecto
+ 3 - Ejecutar el fichero main con ./main
+ 4 - En caso de Error: Permiso denegado. Usar comando 'chmod -x main'
+ 5 - Volver a intentar ejecutar el fichero main
 
 ## Ejemplos para probar
 
